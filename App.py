@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
-st.write("tesadsd")
-
+material_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet2")
+material_df.fillna(0,inplace=True)
+lab_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet3")
+lab_df.fillna(0)
 custom_css = f"""
     <style>
         .css-6qob1r.e1akgbir3 {{
@@ -118,10 +120,10 @@ window_die_cut=st.sidebar.selectbox(
     "Window Diecut",
      ["None","With PVC","Without PVC",])
 
+col1,col2=st.sidebar.columns(2)
 
-material_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet2")
-material_df.fillna(0,inplace=True)
-st.dataframe(material_df)
+col1.dataframe(material_df)
+col2.dataframe(lab_df)
 
 # rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
 # rate_df
