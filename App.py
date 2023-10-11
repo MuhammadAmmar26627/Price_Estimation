@@ -95,7 +95,7 @@ st.sidebar.header("Printing Colors")
 col1, col2, col3 = st.sidebar.columns(3)
 process_color = col1.selectbox(
     "Process Color",
-    [1, 2,3,4]
+    [1, 2,3,4,5,6,7,8,]
 )
 pantone_color=col2.number_input("Pantone Color", min_value=0)
 matallic_color=col3.number_input("Matallic Color", min_value=0)
@@ -124,6 +124,14 @@ window_die_cut=st.sidebar.selectbox(
     "Window Diecut",
      ["None","With PVC","Without PVC",])
 
+st.sidebar.header("Additional Expense")
+col1, col2, col3 = st.sidebar.columns(3)
+Mics = col1.number_input("Micsellneus", min_value=0)
+Profit_margin = col2.number_input("Profit Margin", min_value=0)
+project_difficulty = col3.number_input("Project Difficulty", min_value=0)
+
+
+
 
 
 
@@ -131,22 +139,23 @@ window_die_cut=st.sidebar.selectbox(
 
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Total Amount", "70 °F", "1.2 °F")
+col1.metric("Total Amount", "10000", "Misc Profit Marig Difficulty")
 # col2.metric("Wind", "9 mph", "-8%")
-col3.metric("Cost Per Piece", "86%", "4%")
+col3.metric("Cost Per Piece", "40", "")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Material Cost", "70 °F", "1.2 °F")
-col2.metric("Labour Cost", "9 mph", "8%")
-col3.metric("Material + Labour Cost", "86%", "4%")
+col1.metric("Material Cost", "5000", "")
+col2.metric("Labour Cost", "5000", "")
+col3.metric("Material + Labour Cost", "10000 Rs", "")
 
 
 
 col1,col2=st.columns(2)
 n_rows=13
 height = int(35.2*(n_rows+1))
-
+col1.header("Material Cost")
 col1.dataframe(material_df, width=700, height=410,hide_index=True)
+col2.header("Labour Cost")
 col2.dataframe(lab_df, width=700, height=height,hide_index=True)
 
 # rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
