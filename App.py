@@ -120,7 +120,7 @@ window_die_cut=st.sidebar.selectbox(
     "Window Diecut",
      ["None","With PVC","Without PVC",])
 
-col1,col2=st.sidebar.columns(2)
+col1,col2=st.columns(2)
 
 col1.dataframe(material_df)
 col2.dataframe(lab_df)
