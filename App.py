@@ -1,24 +1,28 @@
 import streamlit as st
 import pandas as pd
+st.set_page_config(layout="wide")
+
+
+
 material_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet2")
 material_df.fillna(0,inplace=True)
 lab_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet3")
 lab_df.fillna(0)
-custom_css = f"""
-    <style>
-        .css-6qob1r.e1akgbir3 {{
-            color: firebrick;
-            background-color: black;
-        }}
-        .css-1629p8f.eqr7zpz1 >h2{{
-            color: firebrick;
-        }}
-    </style>
-"""
+# custom_css = f"""
+#     <style>
+#         .css-6qob1r.e1akgbir3 {{
+#             color: firebrick;
+#             background-color: black;
+#         }}
+#         .css-1629p8f.eqr7zpz1 >h2{{
+#             color: firebrick;
+#         }}
+#     </style>
+# """
 
 
 # Apply custom CSS to change sidebar width
-st.markdown(custom_css, unsafe_allow_html=True)
+# st.markdown(custom_css, unsafe_allow_html=True)
 # custom_css = f"""
 #     <style>
 #         h2 {{
@@ -120,10 +124,30 @@ window_die_cut=st.sidebar.selectbox(
     "Window Diecut",
      ["None","With PVC","Without PVC",])
 
-col1,col2=st.columns(2)
 
-col1.dataframe(material_df, width=700, height=710)
-col2.dataframe(lab_df, width=700)
+
+
+
+
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Amount", "70 °F", "1.2 °F")
+# col2.metric("Wind", "9 mph", "-8%")
+col3.metric("Cost Per Piece", "86%", "4%")
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Material Cost", "70 °F", "1.2 °F")
+col2.metric("Labour Cost", "9 mph", "8%")
+col3.metric("Material + Labour Cost", "86%", "4%")
+
+
+
+col1,col2=st.columns(2)
+n_rows=13
+height = int(35.2*(n_rows+1))
+
+col1.dataframe(material_df, width=700, height=410,hide_index=True)
+col2.dataframe(lab_df, width=700, height=height,hide_index=True)
 
 # rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
 # rate_df
