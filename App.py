@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd
+
 
 custom_css = f"""
     <style>
@@ -115,3 +117,11 @@ UV = col4.selectbox(
 window_die_cut=st.sidebar.selectbox(
     "Window Diecut",
      ["None","With PVC","Without PVC",])
+
+
+material_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet2")
+material_df.fillna(0,inplace=True)
+st.dataframe(material_df)
+
+# rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
+# rate_df
