@@ -122,8 +122,8 @@ window_die_cut=st.sidebar.selectbox(
 
 col1,col2=st.columns(2)
 
-col1.dataframe(material_df)
-col2.dataframe(lab_df)
+col1.dataframe(material_df, width=700, height=768)
+col2.dataframe(lab_df, width=700, height=768)
 
 # rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
 # rate_df
