@@ -3,7 +3,7 @@ import pandas as pd
 st.set_page_config(layout="wide")
 
 
-
+rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
 material_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet2")
 material_df.fillna(0,inplace=True)
 lab_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet3")
@@ -71,13 +71,13 @@ W_P=col1.number_input("W_Print", min_value=0)
 L_P=col2.number_input("L_Print", min_value=0)
 # st.sidebar.header("Material")
 
-Material_p = col1.selectbox(
-    "Material_Printing",
-    ["Bux Board", "Bleach Card", "Art Card", "Kraf",]
-)
-gsm_p = col2.number_input("GSM_Print", min_value=0)
-up_p = col1.number_input("Box Uping_Print", min_value=0)
-Req_Q_p= col2.number_input("Required Quantity_P", min_value=0)
+# Material_p = col1.selectbox(
+#     "Material_Printing",
+#     ["Bux Board", "Bleach Card", "Art Card", "Kraf",]
+# )
+# gsm_p = col2.number_input("GSM_Print", min_value=0)
+# up_p = col1.number_input("Box Uping_Print", min_value=0)
+# Req_Q_p= col2.number_input("Required Quantity_P", min_value=0)
 
 st.sidebar.header("Corrugation")
 col1, col2 = st.sidebar.columns(2)
@@ -105,19 +105,23 @@ st.sidebar.header("Add-Ons")
 col1, col2, col3,col4 = st.sidebar.columns(4)
 Foil = col1.selectbox(
     "Foiling",
-    ["Yes","No",]
+    ["No","Yes",],
+     index=0
 )
 Deboss = col2.selectbox(
     "Deboss",
-     ["Yes","No",]
+     ["No","Yes",],
+     index=0
 )
 Emboss = col3.selectbox(
     "Emboss",
-     ["Yes","No",]
+     ["No","Yes",],
+     index=0
 )
 UV = col4.selectbox(
     "UV",
-     ["Yes","No",]
+     ["No","Yes",],
+     index=0
 )
 
 window_die_cut=st.sidebar.selectbox(
@@ -131,6 +135,26 @@ Profit_margin = col2.number_input("Profit Margin", min_value=0)
 project_difficulty = col3.number_input("Project Difficulty", min_value=0)
 
 
+w,l=W_S,L_S
+if (w<=12 and l<=17) or (l<=12 and w<=17):
+    machine= rate_df[rate_df.Machine_size=="12x17"]
+    print("12x17")
+elif (w<=23 and l<=17) or (l<=23 and w<=17):
+    machine= rate_df[rate_df.Machine_size=="23x17"]
+    print("23x17")
+elif (w<=25 and l<=36) or (l<=25 and w<=36):
+    machine= rate_df[rate_df.Machine_size=="25x36"]
+    print("25x36")
+elif (w<=28 and l<=40) or (l<=28 and w<=40):
+    machine= rate_df[rate_df.Machine_size=="28x40"]
+    print("28x40")
+elif (w<=35 and l<=45) or (l<=35 and w<=45):
+    machine= rate_df[rate_df.Machine_size=="35x45"]
+    print("35x45")
+elif (w<=40 and l<=56) or (l<=35 and w<=45):
+    machine= rate_df[rate_df.Machine_size=="40x56"]
+    print("40x56")
+st.dataframe(machine,hide_index=True)
 
 
 
