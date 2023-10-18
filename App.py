@@ -67,7 +67,8 @@ def Pasting_Calculator(Machine,Req_Q):
                 factor=i
                 break
         return Machine["Pasting"][0]*i
-    except:
+    except Exception as e:
+        print(e)
         return 0
 
 def Die_cut_price(Machine):
