@@ -46,23 +46,29 @@ def foil_price(w_p,l_p,Foil,laminate_sheet,rate=0.025):
         return 0
     
 def UV_price(w_s,l_s,UV,printable_quantity,rate=0.035):
-    if UV=="Yes":
-        return int(w_s*l_s*printable_quantity*rate)
-    else:
+    try:
+        if UV=="Yes":
+            return int(w_s*l_s*printable_quantity*rate)
+        else:
+            return 0
+    except:
         return 0
     
 def Pasting_Calculator(Machine,Req_Q):
-    thresholds = [
-        1050, 2100, 3150, 4200, 5250, 6300, 7350, 8400, 9450, 10500,
-        11500, 12500, 13500, 14500, 15500, 16500, 17500, 18500, 19600,
-        20700, 21700, 22700, 23978, 25020, 26167, 27105, 28252, 29294,
-        30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719
-    ]
-    for i, threshold in enumerate(thresholds, start=1):
-        if Req_Q <= threshold:
-            factor=i
-            break
-    return Machine["Pasting"][0]*i
+    try:
+        thresholds = [
+            1050, 2100, 3150, 4200, 5250, 6300, 7350, 8400, 9450, 10500,
+            11500, 12500, 13500, 14500, 15500, 16500, 17500, 18500, 19600,
+            20700, 21700, 22700, 23978, 25020, 26167, 27105, 28252, 29294,
+            30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719
+        ]
+        for i, threshold in enumerate(thresholds, start=1):
+            if Req_Q <= threshold:
+                factor=i
+                break
+        return Machine["Pasting"][0]*i
+    except:
+        return 0
 
 def Die_cut_price(Machine):
     try:
@@ -77,72 +83,78 @@ def Die_cut_price(Machine):
         return 0
 
 def Lamination_sheets_calculator(sheet):
-    if sheet <= 100:
-        return math.ceil(sheet * 0.5 + sheet)
-    elif sheet <= 200:
-        return math.ceil(sheet * 0.5 + sheet)
-    elif sheet <= 300:
-        return math.ceil(sheet * 0.4 + sheet)
-    elif sheet <= 400:
-        return math.ceil(sheet * 0.2 + sheet)
-    elif sheet <= 500:
-        return math.ceil(sheet * 0.2 + sheet)
-    elif sheet <= 600:
-        return math.ceil(sheet * 0.18 + sheet)
-    elif sheet >= 650 and sheet <= 1000:
-        return math.ceil(sheet * 0.15 + sheet)
-    elif sheet >= 1000 and sheet <= 1500:
-        return math.ceil(sheet * 0.1 + sheet)
-    elif sheet >= 1500 and sheet <= 2000:
-        return math.ceil(sheet * 0.12 + sheet)
-    elif sheet >= 2000 and sheet <= 3000:
-        return math.ceil(sheet * 0.08 + sheet)
-    elif sheet >= 3000 and sheet <= 4000:
-        return math.ceil(sheet * 0.04 + sheet)
-    elif sheet >= 4000 and sheet <= 7000:
-        return math.ceil(sheet * 0.04 + sheet)
-    elif sheet > 7000:
-        return math.ceil(sheet * 0.025 + sheet)
-    else:
-        return sheet
+    try:
+        if sheet <= 100:
+            return math.ceil(sheet * 0.5 + sheet)
+        elif sheet <= 200:
+            return math.ceil(sheet * 0.5 + sheet)
+        elif sheet <= 300:
+            return math.ceil(sheet * 0.4 + sheet)
+        elif sheet <= 400:
+            return math.ceil(sheet * 0.2 + sheet)
+        elif sheet <= 500:
+            return math.ceil(sheet * 0.2 + sheet)
+        elif sheet <= 600:
+            return math.ceil(sheet * 0.18 + sheet)
+        elif sheet >= 650 and sheet <= 1000:
+            return math.ceil(sheet * 0.15 + sheet)
+        elif sheet >= 1000 and sheet <= 1500:
+            return math.ceil(sheet * 0.1 + sheet)
+        elif sheet >= 1500 and sheet <= 2000:
+            return math.ceil(sheet * 0.12 + sheet)
+        elif sheet >= 2000 and sheet <= 3000:
+            return math.ceil(sheet * 0.08 + sheet)
+        elif sheet >= 3000 and sheet <= 4000:
+            return math.ceil(sheet * 0.04 + sheet)
+        elif sheet >= 4000 and sheet <= 7000:
+            return math.ceil(sheet * 0.04 + sheet)
+        elif sheet > 7000:
+            return math.ceil(sheet * 0.025 + sheet)
+        else:
+            return sheet
+    except:
+        return 0
 
 def Print_Sheet_calculator(sheet):
-    if sheet <= 100:
-        return math.ceil(sheet * 1.5 + sheet)
-    elif sheet <= 200:
-        return math.ceil(sheet * 1.0 + sheet)
-    elif sheet <= 300:
-        return math.ceil(sheet * 0.65 + sheet)
-    elif sheet <= 400:
-        return math.ceil(sheet * 0.45 + sheet)
-    elif sheet <= 500:
-        return math.ceil(sheet * 0.35 + sheet)
-    elif sheet <= 600:
-        return math.ceil(sheet * 0.3 + sheet)
-    elif sheet >= 700 and sheet <= 1000:
-        return math.ceil(sheet * 0.17 + sheet)
-    elif sheet >= 1000 and sheet <= 1500:
-        return math.ceil(sheet * 0.15 + sheet)
-    elif sheet >= 1500 and sheet <= 2000:
-        return math.ceil(sheet * 0.15 + sheet)
-    elif sheet >= 2000 and sheet <= 3000:
-        return math.ceil(sheet * 0.1 + sheet)
-    elif sheet >= 3000 and sheet <= 4000:
-        return math.ceil(sheet * 0.08 + sheet)
-    elif sheet >= 4000 and sheet <= 5000:
-        return math.ceil(sheet * 0.07 + sheet)
-    elif sheet <= 6000:
-        return math.ceil(sheet * 0.05 + sheet)
-    elif sheet <= 7000:
-        return math.ceil(sheet * 0.05 + sheet)
-    elif sheet <= 8000:
-        return math.ceil(sheet * 0.05 + sheet)
-    elif sheet <= 9000:
-        return math.ceil(sheet * 0.045 + sheet)
-    elif sheet <= 10000:
-        return math.ceil(sheet * 0.0475 + sheet)
-    elif sheet > 10000:
-        return math.ceil(sheet * 0.0425 + sheet)
+    try:
+        if sheet <= 100:
+            return math.ceil(sheet * 1.5 + sheet)
+        elif sheet <= 200:
+            return math.ceil(sheet * 1.0 + sheet)
+        elif sheet <= 300:
+            return math.ceil(sheet * 0.65 + sheet)
+        elif sheet <= 400:
+            return math.ceil(sheet * 0.45 + sheet)
+        elif sheet <= 500:
+            return math.ceil(sheet * 0.35 + sheet)
+        elif sheet <= 600:
+            return math.ceil(sheet * 0.3 + sheet)
+        elif sheet >= 700 and sheet <= 1000:
+            return math.ceil(sheet * 0.17 + sheet)
+        elif sheet >= 1000 and sheet <= 1500:
+            return math.ceil(sheet * 0.15 + sheet)
+        elif sheet >= 1500 and sheet <= 2000:
+            return math.ceil(sheet * 0.15 + sheet)
+        elif sheet >= 2000 and sheet <= 3000:
+            return math.ceil(sheet * 0.1 + sheet)
+        elif sheet >= 3000 and sheet <= 4000:
+            return math.ceil(sheet * 0.08 + sheet)
+        elif sheet >= 4000 and sheet <= 5000:
+            return math.ceil(sheet * 0.07 + sheet)
+        elif sheet <= 6000:
+            return math.ceil(sheet * 0.05 + sheet)
+        elif sheet <= 7000:
+            return math.ceil(sheet * 0.05 + sheet)
+        elif sheet <= 8000:
+            return math.ceil(sheet * 0.05 + sheet)
+        elif sheet <= 9000:
+            return math.ceil(sheet * 0.045 + sheet)
+        elif sheet <= 10000:
+            return math.ceil(sheet * 0.0475 + sheet)
+        elif sheet > 10000:
+            return math.ceil(sheet * 0.0425 + sheet)
+    except:
+        return 0
 
 
 def find_machine_size(w, l,rate_df):
