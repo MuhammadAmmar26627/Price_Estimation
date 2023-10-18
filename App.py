@@ -66,7 +66,7 @@ def Pasting_Calculator(Machine,Req_Q):
             if Req_Q <= threshold:
                 factor=i
                 break
-        return Machine["Pasting"][0]*i
+        return Machine["Pasting"].iloc[0]*i
     except Exception as e:
         print(e)
         return 0
