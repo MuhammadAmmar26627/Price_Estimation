@@ -4,7 +4,7 @@ import math
 st.set_page_config(layout="wide")
 
 
-
+@st.cache_data
 def corgation_price(w_s,l_s,pasting,Lamination_sheet,rate=15):
     try:
         if pasting=="Single Side":
@@ -13,7 +13,7 @@ def corgation_price(w_s,l_s,pasting,Lamination_sheet,rate=15):
             return int(2*w_s*l_s*rate*Lamination_sheet/2400)
     except Exception as e:
         return 0
-
+@st.cache_data
 def embosing_price(w_p,l_p,Emboss,Machine,print_sheet):
     try:
         if Emboss=="Yes":
@@ -26,6 +26,7 @@ def embosing_price(w_p,l_p,Emboss,Machine,print_sheet):
             return Machine["Embos"].iloc[0]*factor
     except:
         return 0
+@st.cache_data
 def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
     try:
         if Debosing=="Yes":
@@ -38,7 +39,7 @@ def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
             return Machine["Debos"].iloc[0]*factor
     except:
         return 0
-
+@st.cache_data
 def foil_price(w_p,l_p,Foil,laminate_sheet,rate=0.025):
     if Foil=="Yes":
         return int(w_p*l_p*laminate_sheet*rate)
@@ -53,7 +54,7 @@ def UV_price(w_s,l_s,UV,printable_quantity,rate=0.035):
             return 0
     except:
         return 0
-    
+@st.cache_data   
 def Pasting_Calculator(Machine,Req_Q):
     try:
         thresholds = [
@@ -67,10 +68,9 @@ def Pasting_Calculator(Machine,Req_Q):
                 factor=i
                 break
         return Machine["Pasting"].iloc[0]*i
-    except Exception as e:
-        print(e)
+    except:
         return 0
-
+@st.cache_data
 def Die_cut_price(Machine):
     try:
         # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
@@ -82,7 +82,7 @@ def Die_cut_price(Machine):
         return Machine["Die Cut"].iloc[0]*factor
     except:
         return 0
-
+@st.cache_data
 def Lamination_sheets_calculator(sheet):
     try:
         if sheet <= 100:
@@ -115,7 +115,7 @@ def Lamination_sheets_calculator(sheet):
             return sheet
     except:
         return 0
-
+@st.cache_data
 def Print_Sheet_calculator(sheet):
     try:
         if sheet <= 100:
@@ -157,7 +157,7 @@ def Print_Sheet_calculator(sheet):
     except:
         return 0
 
-
+@st.cache_data
 def find_machine_size(w, l,rate_df):
     
     if (w <= 12 and l <= 17) or (l <= 12 and w <= 17):
@@ -183,7 +183,7 @@ def find_machine_size(w, l,rate_df):
         machine = None
     return machine
     # st.dataframe(machine, hide_index=True)
-
+@st.cache_data
 def Printing_Calculator(Machine,cmyk,pms,met,print_sheet):
     try:
         # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
@@ -196,6 +196,7 @@ def Printing_Calculator(Machine,cmyk,pms,met,print_sheet):
         return Machine["CMYK"].iloc[0]*cmyk*factor,Machine["PMS"].iloc[0]*pms*factor,Machine["Met"].iloc[0]*met*factor
     except:
         return 0,0,0
+@st.cache_data
 def Lamination_price_calculator(w_p,l_p,Sheet_printable,inside_rate,outside_rate,rate_df):
     # Outside_rate=Inside_rate=0
     try:
