@@ -2,6 +2,80 @@ import streamlit as st
 import pandas as pd
 import math
 st.set_page_config(layout="wide")
+
+
+
+def corgation_price(w_s,l_s,pasting,Lamination_sheet,rate=15):
+    try:
+        if pasting=="Single Side":
+            return int(w_s*l_s*rate*Lamination_sheet/2400)
+        elif pasting=="Double Side":
+            return int(2*w_s*l_s*rate*Lamination_sheet/2400)
+    except Exception as e:
+        return 0
+
+def embosing_price(w_p,l_p,Emboss,Machine,print_sheet):
+    try:
+        if Emboss=="Yes":
+        # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
+            sheet_list =[1170, 2310, 3300, 4387, 5360, 6405, 7500, 8500, 9532, 10529, 11500, 12500, 13553, 14595, 15742, 16680, 17723, 18765, 19808, 20850, 21893, 22935, 23978, 25020, 26167, 27105, 28252, 29294, 30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719]
+            for i in sheet_list:
+                if print_sheet<=i:
+                    factor=sheet_list.index(i)+1
+                    break
+            return Machine["Embos"].iloc[0]*factor
+    except:
+        return 0
+def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
+    try:
+        if Debosing=="Yes":
+        # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
+            sheet_list =[1170, 2310, 3300, 4387, 5360, 6405, 7500, 8500, 9532, 10529, 11500, 12500, 13553, 14595, 15742, 16680, 17723, 18765, 19808, 20850, 21893, 22935, 23978, 25020, 26167, 27105, 28252, 29294, 30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719]
+            for i in sheet_list:
+                if print_sheet<=i:
+                    factor=sheet_list.index(i)+1
+                    break
+            return Machine["Debos"].iloc[0]*factor
+    except:
+        return 0
+
+def foil_price(w_p,l_p,Foil,laminate_sheet,rate=0.025):
+    if Foil=="Yes":
+        return int(w_p*l_p*laminate_sheet*rate)
+    else:
+        return 0
+    
+def UV_price(w_s,l_s,UV,printable_quantity,rate=0.035):
+    if UV=="Yes":
+        return int(w_s*l_s*printable_quantity*rate)
+    else:
+        return 0
+    
+def Pasting_Calculator(Machine,Req_Q):
+    thresholds = [
+        1050, 2100, 3150, 4200, 5250, 6300, 7350, 8400, 9450, 10500,
+        11500, 12500, 13500, 14500, 15500, 16500, 17500, 18500, 19600,
+        20700, 21700, 22700, 23978, 25020, 26167, 27105, 28252, 29294,
+        30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719
+    ]
+    for i, threshold in enumerate(thresholds, start=1):
+        if Req_Q <= threshold:
+            factor=i
+            break
+    return Machine["Pasting"][0]*i
+
+def Die_cut_price(Machine):
+    try:
+        # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
+        sheet_list =[1170, 2310, 3300, 4387, 5360, 6405, 7500, 8500, 9532, 10529, 11500, 12500, 13553, 14595, 15742, 16680, 17723, 18765, 19808, 20850, 21893, 22935, 23978, 25020, 26167, 27105, 28252, 29294, 30233, 31275, 32318, 33360, 34403, 35485, 36488, 37634, 38677, 39719]
+        for i in sheet_list:
+            if print_sheet<=i:
+                factor=sheet_list.index(i)+1
+                break
+        return Machine["Die Cut"].iloc[0]*factor
+    except:
+        return 0
+
 def Lamination_sheets_calculator(sheet):
     if sheet <= 100:
         return math.ceil(sheet * 0.5 + sheet)
@@ -109,6 +183,23 @@ def Printing_Calculator(Machine,cmyk,pms,met,print_sheet):
         return Machine["CMYK"].iloc[0]*cmyk*factor,Machine["PMS"].iloc[0]*pms*factor,Machine["Met"].iloc[0]*met*factor
     except:
         return 0,0,0
+def Lamination_price_calculator(w_p,l_p,Sheet_printable,inside_rate,outside_rate,rate_df):
+    # Outside_rate=Inside_rate=0
+    try:
+        Outside_rate=rate_df[outside_rate][0]
+    except:
+        Outside_rate=0
+    try:
+        Inside_rate=rate_df[inside_rate][0]
+    except:
+        # print(inside_rate)
+        Inside_rate=0
+    # if Inside_rate!="None":
+        # Inside_rate=rate_df[inside_rate][0]
+    
+    outside_lamination= int((w_p*l_p/144)*Outside_rate*Sheet_printable)
+    inside_lamination= int((w_p*l_p/144)*Inside_rate*Sheet_printable)
+    return outside_lamination,inside_lamination
 
 @st.cache_data
 def load_data(file,sheet_name):
@@ -175,7 +266,7 @@ L_S=col2.number_input("L_Sheet", min_value=0.0)
 
 Material = col1.selectbox(
     "Material",
-    ["Bux Board", "Bleach Card", "Art Card", "Kraf",]
+    ["Bleach Card","Bux Board", "Art Card", "Kraf",]
 )
 gsm = col2.number_input("GSM", min_value=0,value=300)
 up = col1.number_input("Box Uping", min_value=1)
@@ -204,7 +295,7 @@ stock = col1.selectbox(
 
 pasting = col2.selectbox(
     "Corrugation Pasting",
-    ["Single Side", "Double Side",]
+    ["None","Single Side", "Double Side",]
 )
 
 st.sidebar.header("Printing Colors")
@@ -249,17 +340,9 @@ col1,col2=st.sidebar.columns(2)
 inside=col1.selectbox(
     "Inside Lamination",
      ["None","Matte","Gloss","Soft Touch","Varnish",])
-inside=col2.selectbox(
+outside=col2.selectbox(
     "Outside Lamination",
      ["None","Matte","Gloss","Soft Touch","Varnish",])
-# Lamination_side=st.sidebar.selectbox(
-#     "Window Lamination_Side",
-#      ["Single","Double","Without PVC",])
-
-
-
-
-
 
 ############ Additional Expense ##########
 
@@ -279,8 +362,53 @@ st.write(f'print_sheet: {print_sheet}')
 laminate_sheet=Lamination_sheets_calculator(Sheets)
 st.write(f'laminate_sheet: {laminate_sheet}')
 process_color_rate,pantone_color_rate,matallic_color_rate=Printing_Calculator(machine_rate,process_color,pantone_color,matallic_color,print_sheet)
-st.write(process_color_rate,pantone_color_rate,matallic_color_rate)
+# st.write("Printing Rate")
+# st.write(process_color_rate,pantone_color_rate,matallic_color_rate)
+# st.write("Lamination Rate")
+lamination_price=Lamination_price_calculator(W_P,L_P,laminate_sheet,inside,outside,rate_df)
+# st.write(lamination_price)
 
+# st.write("Die Cut")
+die_cut_price=Die_cut_price(machine_rate)
+# st.write(die_cut_price)
+
+# st.write("Pasting")
+pasting_material=Pasting_Calculator(machine_rate,Req_Q)
+# st.write(pasting_material)
+# st.write("UV")
+UV_coating=UV_price(W_S,L_S,UV,print_sheet)
+# st.write(UV_coating)
+
+# st.write("Foil")
+foiling=foil_price(W_P,L_P,Foil,laminate_sheet)
+# st.write(foiling)
+# st.write("Debosing")
+Debosing=debosing_price(W_P,L_P,Deboss,machine_rate,print_sheet)
+# st.write(Debosing)
+# st.write("Embosing")
+Embosing=embosing_price(W_P,L_P,Emboss,machine_rate,print_sheet)
+# st.write(Embosing)
+
+# st.write("Carrugation")
+carrug_lab=corgation_price(W_S,L_S,pasting,laminate_sheet)
+# st.write(carrug_lab)
+lab_df.set_index('index',inplace=True)
+lab_df.loc["Printing"]=(process_color_rate,pantone_color_rate,matallic_color_rate,process_color_rate+pantone_color_rate+matallic_color_rate)
+lab_df.loc["Lam"]=(lamination_price[0],lamination_price[1],0,lamination_price[0]+lamination_price[1])
+lab_df.loc["Die cut"]=(die_cut_price,0,0,die_cut_price)
+lab_df.loc["Pasting"]=(pasting_material,0,0,pasting_material)
+lab_df.loc["Uv Coating"]=(UV_coating,0,0,UV_coating)
+lab_df.loc["Foiling"]=(foiling,0,0,foiling)
+lab_df.loc["Debossing"]=(Debosing,0,0,Debosing)
+lab_df.loc["Embossing"]=(Embosing,0,0,Embosing)
+lab_df.loc["Carrug Lab"]=(carrug_lab,0,0,carrug_lab)
+lab_df.loc["Lab Total"]=(0,0,0,lab_df.iloc[:-1,3].sum())
+
+lab_df.reset_index(inplace=True)
+# corgation_price(10,12.5,"Double Side",3467)
+
+##################################
+############ Material Calculation ##########
 
 
 
@@ -305,6 +433,3 @@ col1.header("Material Cost")
 col1.dataframe(material_df, width=700, height=410,hide_index=True)
 col2.header("Labour Cost")
 col2.dataframe(lab_df, width=700, height=height,hide_index=True)
-
-# rate_df=pd.read_excel("rate_database.xlsx",sheet_name="Sheet1")
-# rate_df
