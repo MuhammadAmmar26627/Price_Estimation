@@ -1,4 +1,4 @@
-import streamlit_authenticator as stauth
+# import streamlit_authenticator as stauth
 import streamlit as st
 import pandas as pd
 import math
