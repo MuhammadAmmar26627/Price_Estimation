@@ -1,10 +1,48 @@
+import streamlit_authenticator as stauth
 import streamlit as st
 import pandas as pd
 import math
 st.set_page_config(layout="wide")
 
+def EmbossBlock_price(Emboss,w_p,l_p):
+    if Emboss=="Yes":
+        return int(w_p*l_p*38/3)
+    else:
+        return 0
 
-@st.cache_data
+def DebossBlock_price(Deboss,w_p,l_p):
+    if Deboss=="Yes":
+        return int(w_p*l_p*38/3)
+    else:
+        return 0
+
+def foil_block_price(foiling,w_p,l_p):
+    if foiling=="Yes":
+        # print(w_p)
+        return int(w_p*l_p*38/3)
+    else:
+        return 0
+
+def Die_making_price(machine):
+    return machine["Die Making"].iloc[0]
+
+#@st.cache_data
+def paper_material(w_s,l_s,gms,print_sheet,rate=400):
+    if gms<=350:
+        return int(w_s*l_s*gms/15500*print_sheet/100*(rate+0))
+    elif gms>350:
+        return int(w_s*l_s*gms/15500*print_sheet/100*(rate+50))
+
+#@st.cache_data
+def CTP_Plates_price(Machine,process_color,pantone_color,matallic_color):
+    try:
+        # print(process_color,pantone_color,matallic_color)
+        return Machine["Price/kg"].iloc[0]*(process_color+pantone_color+matallic_color)
+    except Exception as e:
+        # print(e)
+        return 0
+
+#@st.cache_data
 def corgation_price(w_s,l_s,pasting,Lamination_sheet,rate=15):
     try:
         if pasting=="Single Side":
@@ -13,7 +51,7 @@ def corgation_price(w_s,l_s,pasting,Lamination_sheet,rate=15):
             return int(2*w_s*l_s*rate*Lamination_sheet/2400)
     except Exception as e:
         return 0
-@st.cache_data
+#@st.cache_data
 def embosing_price(w_p,l_p,Emboss,Machine,print_sheet):
     try:
         if Emboss=="Yes":
@@ -26,7 +64,7 @@ def embosing_price(w_p,l_p,Emboss,Machine,print_sheet):
             return Machine["Embos"].iloc[0]*factor
     except:
         return 0
-@st.cache_data
+#@st.cache_data
 def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
     try:
         if Debosing=="Yes":
@@ -39,7 +77,7 @@ def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
             return Machine["Debos"].iloc[0]*factor
     except:
         return 0
-@st.cache_data
+#@st.cache_data
 def foil_price(w_p,l_p,Foil,laminate_sheet,rate=0.025):
     if Foil=="Yes":
         return int(w_p*l_p*laminate_sheet*rate)
@@ -54,7 +92,7 @@ def UV_price(w_s,l_s,UV,printable_quantity,rate=0.035):
             return 0
     except:
         return 0
-@st.cache_data   
+#@st.cache_data   
 def Pasting_Calculator(Machine,Req_Q):
     try:
         thresholds = [
@@ -70,7 +108,7 @@ def Pasting_Calculator(Machine,Req_Q):
         return Machine["Pasting"].iloc[0]*i
     except:
         return 0
-@st.cache_data
+#@st.cache_data
 def Die_cut_price(Machine):
     try:
         # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
@@ -82,7 +120,7 @@ def Die_cut_price(Machine):
         return Machine["Die Cut"].iloc[0]*factor
     except:
         return 0
-@st.cache_data
+#@st.cache_data
 def Lamination_sheets_calculator(sheet):
     try:
         if sheet <= 100:
@@ -115,7 +153,7 @@ def Lamination_sheets_calculator(sheet):
             return sheet
     except:
         return 0
-@st.cache_data
+#@st.cache_data
 def Print_Sheet_calculator(sheet):
     try:
         if sheet <= 100:
@@ -157,7 +195,7 @@ def Print_Sheet_calculator(sheet):
     except:
         return 0
 
-@st.cache_data
+#@st.cache_data
 def find_machine_size(w, l,rate_df):
     
     if (w <= 12 and l <= 17) or (l <= 12 and w <= 17):
@@ -183,7 +221,7 @@ def find_machine_size(w, l,rate_df):
         machine = None
     return machine
     # st.dataframe(machine, hide_index=True)
-@st.cache_data
+#@st.cache_data
 def Printing_Calculator(Machine,cmyk,pms,met,print_sheet):
     try:
         # as printing rate is per 1170 and below list show us that if printing rate is 1400 and we have sheets 3350 it is below 4387 so we multply its index+1 to rate
@@ -196,10 +234,11 @@ def Printing_Calculator(Machine,cmyk,pms,met,print_sheet):
         return Machine["CMYK"].iloc[0]*cmyk*factor,Machine["PMS"].iloc[0]*pms*factor,Machine["Met"].iloc[0]*met*factor
     except:
         return 0,0,0
-@st.cache_data
+#@st.cache_data
 def Lamination_price_calculator(w_p,l_p,Sheet_printable,inside_rate,outside_rate,rate_df):
     # Outside_rate=Inside_rate=0
     try:
+        # print(rate_df[outside_rate][0])
         Outside_rate=rate_df[outside_rate][0]
     except:
         Outside_rate=0
@@ -422,12 +461,29 @@ lab_df.reset_index(inplace=True)
 # corgation_price(10,12.5,"Double Side",3467)
 
 ##################################
-############ Material Calculation ##########
+############ Material Calculation #############
+material_df.set_index('index',inplace=True)
+ctp=CTP_Plates_price(machine_rate,process_color,pantone_color,matallic_color)
+material_df.loc["CTP Plates"]=(0,0,0,ctp)
+paper_price=paper_material(W_S,L_S,gsm,print_sheet,rate=400)
+material_df.loc["Paper"]=(0,paper_price,0,paper_price)
+die_making_price=Die_making_price(machine_rate)
+material_df.loc["Die Making"]=(0,0,0,die_making_price)
+foil_block=foil_block_price(Foil,W_P,L_P)
+material_df.loc["Foil Block"]=(0,0,0,foil_block)
+deboss_price_Material=DebossBlock_price(Deboss,W_P,L_P)
+material_df.loc["DebossBlock"]=(0,0,0,deboss_price_Material)
+emboss_price_Material=EmbossBlock_price(Emboss,W_P,L_P)
+material_df.loc["EmbossBlock"]=(0,0,0,emboss_price_Material)
+material_df.loc["Material"]=(0,0,0,material_df.iloc[:-1,3].sum())
+
+material_df.reset_index(inplace=True)
 
 
 
 
 
+###############################################
 col1, col2, col3 = st.columns(3)
 col1.metric("Total Amount", "10000", "Misc Profit Marig Difficulty")
 # col2.metric("Wind", "9 mph", "-8%")
@@ -447,4 +503,4 @@ col1.header("Material Cost")
 col1.dataframe(material_df, width=700, height=410,hide_index=True)
 col2.header("Labour Cost")
 col2.dataframe(lab_df, width=700, height=height,hide_index=True)
-st.cache_data.clear()
+# st.cache_data.clear()
