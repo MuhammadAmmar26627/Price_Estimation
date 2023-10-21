@@ -486,14 +486,14 @@ material_df.reset_index(inplace=True)
 
 ###############################################
 col1, col2, col3 = st.columns(3)
-col1.metric("Total Amount", "10000", "Misc Profit Marig Difficulty")
+col1.metric("Total Amount", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum(), "Misc Profit Marig Difficulty")
 # col2.metric("Wind", "9 mph", "-8%")
 col3.metric("Cost Per Piece", "40", "")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Material Cost", "5000", "")
-col2.metric("Labour Cost", "5000", "")
-col3.metric("Material + Labour Cost", "10000 Rs", "")
+col1.metric("Material Cost", material_df.iloc[:-1,4].sum(), "")
+col2.metric("Labour Cost", lab_df.iloc[:-1,4].sum(), "")
+col3.metric("Material + Labour Cost", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum(), "")
 
 
 
