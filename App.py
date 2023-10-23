@@ -199,7 +199,7 @@ def Print_Sheet_calculator(sheet):
 @st.cache_data
 def find_machine_size(w, l,rate_df):
     
-    if (w <= 12.5 and l <= 17) or (l <= 12.5 and w <= 17):
+    if (w <= 12.5 and l <= 18) or (l <= 12.5 and w <= 18):
         machine = rate_df[rate_df.Machine_size == "12x17"]
         # print("12x17")
     elif (w <= 23 and l <= 17) or (l <= 23 and w <= 17):
