@@ -202,7 +202,7 @@ def find_machine_size(w, l,rate_df):
     if (w <= 12.5 and l <= 18) or (l <= 12.5 and w <= 18):
         machine = rate_df[rate_df.Machine_size == "12x17"]
         # print("12x17")
-    elif (w <= 23 and l <= 17) or (l <= 23 and w <= 17):
+    elif (w <= 25 and l <= 18) or (l <= 25 and w <= 18):
         machine = rate_df[rate_df.Machine_size == "23x17"]
         # print("23x17")
     elif (w <= 25 and l <= 36) or (l <= 25 and w <= 36):
@@ -214,7 +214,7 @@ def find_machine_size(w, l,rate_df):
     elif (w <= 35 and l <= 45) or (l <= 35 and w <= 45):
         machine = rate_df[rate_df.Machine_size == "35x45"]
         # print("35x45")
-    elif (w <= 40 and l <= 56) or (l <= 40 and w <= 56):
+    elif (w <= 40 and l <= 60) or (l <= 40 and w <= 60):
         machine = rate_df[rate_df.Machine_size == "40x56"]
         # print("40x56")
     else:
