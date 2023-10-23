@@ -28,11 +28,27 @@ def Die_making_price(machine):
     return machine["Die Making"].iloc[0]
 
 @st.cache_data
-def paper_material(w_s,l_s,gms,print_sheet,rate=400):
-    if gms<=350:
-        return int(w_s*l_s*gms/15500*print_sheet/100*(rate+0))
-    elif gms>350:
-        return int(w_s*l_s*gms/15500*print_sheet/100*(rate+50))
+def paper_material(w_s,l_s,gms,print_sheet,material,rate=400,):
+    # ["Bux Board", "Bleach Card", "Art Card", "Kraft",]
+
+    if gms<=350 and material=="Bleach Card":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(400))
+    elif gms>350 and material=="Bleach Card":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(450))
+    elif gms<=350 and material=="Bux Board":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(350))
+    elif gms>350 and material=="Bux Board":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(425))
+    elif gms<=350 and material=="Kraft":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(350))
+    elif gms>350 and material=="Kraft":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(425))
+    elif gms<=350 and material=="Art Card":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(350))
+    elif gms>350 and material=="Art Card":
+        return int(w_s*l_s*gms/15500*print_sheet/100*(425))
+    else:
+        return 0
 
 @st.cache_data
 def CTP_Plates_price(Machine,process_color,pantone_color,matallic_color):
@@ -320,7 +336,7 @@ L_S=col2.number_input("L_Sheet", min_value=0.0)
 
 Material = col1.selectbox(
     "Material",
-    ["Bleach Card","Bux Board", "Art Card", "Kraf",]
+    ["Bleach Card","Bux Board", "Art Card", "Kraft",]
 )
 gsm = col2.number_input("GSM", min_value=0,value=300)
 up = col1.number_input("Box Uping", min_value=1)
@@ -466,7 +482,7 @@ lab_df.reset_index(inplace=True)
 material_df.set_index('index',inplace=True)
 ctp=CTP_Plates_price(machine_rate,process_color,pantone_color,matallic_color)
 material_df.loc["CTP Plates"]=(0,0,0,ctp)
-paper_price=paper_material(W_S,L_S,gsm,print_sheet,rate=400)
+paper_price=paper_material(W_S,L_S,gsm,print_sheet,rate=400,Material)
 material_df.loc["Paper"]=(0,paper_price,0,paper_price)
 die_making_price=Die_making_price(machine_rate)
 material_df.loc["Die Making"]=(0,0,0,die_making_price)
