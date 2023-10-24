@@ -3,7 +3,17 @@ import streamlit as st
 import pandas as pd
 import math
 st.set_page_config(layout="wide")
-
+@st.cache_data
+def carrugation_price_Material(stock,w_p,l_p,laminate_sheet):
+    if stock=="L1":
+        return int(w_p*l_p*print_sheet/2400*70)
+    elif stock=="E Flute":
+        return int(w_p*l_p*print_sheet/2400*120)
+    elif stock=="E Flute":
+        return int(w_p*l_p*print_sheet/2400*120)
+    else:
+        return 0
+    
 @st.cache_data
 def EmbossBlock_price(Emboss,w_p,l_p):
     if Emboss=="Yes":
@@ -492,6 +502,8 @@ deboss_price_Material=DebossBlock_price(Deboss,W_P,L_P)
 material_df.loc["DebossBlock"]=(0,0,0,deboss_price_Material)
 emboss_price_Material=EmbossBlock_price(Emboss,W_P,L_P)
 material_df.loc["EmbossBlock"]=(0,0,0,emboss_price_Material)
+Carrugation_price_Material=carrugation_price_Material(stock,W_P,L_P,laminate_sheet) ### Editing
+material_df.loc["Carrugation"]=(0,0,0,Carrugation_price_Material)
 material_df.loc["Material"]=(0,0,0,material_df.iloc[:-1,3].sum())
 
 material_df.reset_index(inplace=True)
