@@ -6,11 +6,11 @@ st.set_page_config(layout="wide")
 @st.cache_data
 def carrugation_price_Material(stock,w_s,l_s,laminate_sheet):
     if stock=="L1":
-        return int(w_s*l_s*print_sheet/2400*70)
+        return int(w_s*l_s*laminate_sheet/2400*70)
     elif stock=="E Flute":
-        return int(w_s*l_s*print_sheet/2400*120)
+        return int(w_s*l_s*laminate_sheet/2400*120)
     elif stock=="E Flute":
-        return int(w_s*l_s*print_sheet/2400*120)
+        return int(w_s*l_s*laminate_sheet/2400*120)
     else:
         return 0
     
