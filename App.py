@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import math
 st.set_page_config(layout="wide")
+
 @st.cache_data
 def carrugation_price_Material(stock,w_s,l_s,laminate_sheet):
     if stock=="L1":
@@ -13,7 +14,6 @@ def carrugation_price_Material(stock,w_s,l_s,laminate_sheet):
         return int(w_s*l_s*laminate_sheet/2400*120)
     else:
         return 0
-    
 @st.cache_data
 def EmbossBlock_price(Emboss,w_p,l_p):
     if Emboss=="Yes":
@@ -40,7 +40,6 @@ def Die_making_price(machine):
 @st.cache_data
 def paper_material(w_s,l_s,gms,print_sheet,material,rate=400,):
     # ["Bux Board", "Bleach Card", "Art Card", "Kraft",]
-
     if gms<=350 and material=="Bleach Card":
         return int(w_s*l_s*gms/15500*print_sheet/100*(400))
     elif gms>350 and material=="Bleach Card":
@@ -343,12 +342,13 @@ W_S=col1.number_input("W_Sheet", min_value=0.0)
 
 L_S=col2.number_input("L_Sheet", min_value=0.0)
 # st.sidebar.header("Material")
-
+col1, col2 = st.sidebar.columns(2)
 Material = col1.selectbox(
     "Material",
     ["Bleach Card","Bux Board", "Art Card", "Kraft",]
 )
 gsm = col2.number_input("GSM", min_value=0,value=300)
+col1, col2 = st.sidebar.columns(2)
 up = col1.number_input("Box Uping", min_value=1)
 Req_Q = col2.number_input("Required Quantity", min_value=0)
 
