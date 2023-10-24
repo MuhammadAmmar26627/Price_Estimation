@@ -4,13 +4,13 @@ import pandas as pd
 import math
 st.set_page_config(layout="wide")
 @st.cache_data
-def carrugation_price_Material(stock,w_p,l_p,laminate_sheet):
+def carrugation_price_Material(stock,w_s,l_s,laminate_sheet):
     if stock=="L1":
-        return int(w_p*l_p*print_sheet/2400*70)
+        return int(w_s*l_s*print_sheet/2400*70)
     elif stock=="E Flute":
-        return int(w_p*l_p*print_sheet/2400*120)
+        return int(w_s*l_s*print_sheet/2400*120)
     elif stock=="E Flute":
-        return int(w_p*l_p*print_sheet/2400*120)
+        return int(w_s*l_s*print_sheet/2400*120)
     else:
         return 0
     
@@ -502,7 +502,7 @@ deboss_price_Material=DebossBlock_price(Deboss,W_P,L_P)
 material_df.loc["DebossBlock"]=(0,0,0,deboss_price_Material)
 emboss_price_Material=EmbossBlock_price(Emboss,W_P,L_P)
 material_df.loc["EmbossBlock"]=(0,0,0,emboss_price_Material)
-Carrugation_price_Material=carrugation_price_Material(stock,W_P,L_P,laminate_sheet) ### Editing
+Carrugation_price_Material=carrugation_price_Material(stock,W_S,L_S,laminate_sheet) ### Editing
 material_df.loc["Carrugation"]=(0,0,0,Carrugation_price_Material)
 material_df.loc["Material"]=(0,0,0,material_df.iloc[:-1,3].sum())
 
