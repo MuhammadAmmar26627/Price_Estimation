@@ -352,10 +352,18 @@ col1, col2 = st.sidebar.columns(2)
 up = col1.number_input("Box Uping", min_value=1)
 Req_Q = col2.number_input("Required Quantity", min_value=0)
 
-st.sidebar.header("Print Size")
-col1, col2 = st.sidebar.columns(2)
-W_P=col1.number_input("W_Print", min_value=0.0)
-L_P=col2.number_input("L_Print", min_value=0.0)
+
+agree = st.sidebar.checkbox('Print Size Same as Sheet Size')
+if agree:
+    st.sidebar.header("Print Size")
+    col1, col2 = st.sidebar.columns(2)
+    W_P=col1.number_input("W_Print", min_value=W_S,disabled=True)
+    L_P=col2.number_input("L_Print", min_value=L_S,disabled=True)
+else:
+    st.sidebar.header("Print Size")
+    col1, col2 = st.sidebar.columns(2)
+    W_P=col1.number_input("W_Print", min_value=0.0)
+    L_P=col2.number_input("L_Print", min_value=0.0)
 # st.sidebar.header("Material")
 
 # Material_p = col1.selectbox(
