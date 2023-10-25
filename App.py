@@ -525,7 +525,7 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Total Amount", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum(), "Misc Profit Marig Difficulty")
 # col2.metric("Wind", "9 mph", "-8%")
 try:
-    cost_per_piece=material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum()/Req_Q
+    cost_per_piece=(material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum())/Req_Q
 except:
     cost_per_piece=0
 col3.metric("Cost Per Piece", cost_per_piece, "")
