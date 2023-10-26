@@ -106,7 +106,7 @@ def debosing_price(w_p,l_p,Debosing,Machine,print_sheet):
 @st.cache_data
 def foil_price(w_p,l_p,Foil,laminate_sheet,rate=0.04):
     if Foil=="Yes":
-        return int(w_p*l_p*laminate_sheet*rate/3)
+        return int(w_p*l_p*laminate_sheet*rate)
     else:
         return 0
     
