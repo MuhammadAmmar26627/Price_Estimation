@@ -527,7 +527,7 @@ col1.metric("Total Amount", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum
 if Req_Q==0:
     cost_per_piece=0
 else:
-    cost_per_piece=material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum()/Req_Q
+    cost_per_piece=(material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum())/Req_Q
 col3.metric("Cost Per Piece", cost_per_piece, "")
 # col3.metric("Cost Per Piece", "40", "")
 
