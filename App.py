@@ -437,10 +437,9 @@ outside=col2.selectbox(
 ############ Additional Expense ##########
 
 st.sidebar.header("Additional Expense")
-col1, col2, col3 = st.sidebar.columns(3)
+col1, col2 = st.sidebar.columns(2)
 Mics = col1.number_input("Micsellneus", min_value=0)
 Profit_margin = col2.number_input("Profit Margin", min_value=0)
-project_difficulty = col3.number_input("Project Difficulty", min_value=0)
 
 
 ### disply Machine size
@@ -524,19 +523,21 @@ material_df.reset_index(inplace=True)
 
 ###############################################
 col1, col2, col3 = st.columns(3)
-col1.metric("Total Amount", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum(), "Misc Profit Marig Difficulty")
+total=material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum()+Mics
+Profit_margin=1+Profit_margin/100
+total=total*Profit_margin
+col1.metric("Total Amount", total, "Misc Profit Marig")
 # col2.metric("Wind", "9 mph", "-8%")
 if Req_Q==0:
     cost_per_piece=0
 else:
-    cost_per_piece=(material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum())/Req_Q
+    cost_per_piece=material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum()/Req_Q
 col3.metric("Cost Per Piece", cost_per_piece, "")
-# col3.metric("Cost Per Piece", "40", "")
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Material Cost", material_df.iloc[:-1,4].sum(), "")
 col2.metric("Labour Cost", lab_df.iloc[:-1,4].sum(), "")
-col3.metric("Material + Labour Cost", material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum(), "")
+col3.metric("Mics", Mics, "")
 
 
 
