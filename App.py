@@ -6,7 +6,9 @@ st.set_page_config(layout="wide")
 
 @st.cache_data
 def carrugation_price_Material(stock,w_s,l_s,laminate_sheet):
-    if stock=="L1":
+    if stock=="None":
+        return 0
+    elif stock=="L1":
         return int(w_s*l_s*laminate_sheet/2400*70)
     elif stock=="E Flute":
         return int(w_s*l_s*laminate_sheet/2400*120)
@@ -378,7 +380,7 @@ st.sidebar.header("Corrugation")
 col1, col2 = st.sidebar.columns(2)
 stock = col1.selectbox(
     "Corrugation Material",
-    ["L1", "E Flute", "B Flute"]
+    ["None","L1", "E Flute", "B Flute"]
 )
 
 pasting = col2.selectbox(
