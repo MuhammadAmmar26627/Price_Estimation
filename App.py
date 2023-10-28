@@ -531,7 +531,7 @@ col1.metric("Total Amount", total, "Misc Profit Marig")
 if Req_Q==0:
     cost_per_piece=0
 else:
-    cost_per_piece=material_df.iloc[:-1,4].sum()+lab_df.iloc[:-1,4].sum()/Req_Q
+    cost_per_piece=total/Req_Q
 col3.metric("Cost Per Piece", cost_per_piece, "")
 
 col1, col2, col3 = st.columns(3)
